@@ -1,24 +1,33 @@
 package gramado;
 
+import java.util.Random;
+
 public class Gramado {
 
 	public int[][] gramado;
+	
+	int contador = 0;
+	int linha = 7, coluna = 7;
+	int linhaAux, colunaAux;
+	int linhaRandom, colunaRandom, quantidadeFormigueiros = 7;
+	int quantidadeAcoes = 0;
 
 	public Gramado() {
-		gramado = new int[7][7];
+		gramado = new int[linha][coluna];
 
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 7; j++) {
 				gramado[i][j] = 0;
 			}
 		}
+		gramado[linhaAux = linha -1][colunaAux = coluna -1] = 3;
 	}
 
 	public void mostrarGramado() {
 
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 7; j++) {
-				System.out.print(gramado[i][j]);
+				System.out.print(((gramado[i][j] == 0)? "GR" : (gramado[i][j] == 1)? "FM" : "ST") + " ");
 			}
 			System.out.println();
 		}
@@ -26,34 +35,63 @@ public class Gramado {
 	}
 
 	public void atribuirFormigueiro() {
-		gramado[1][4] = 1;
-		gramado[2][1] = 1;
-		gramado[2][5] = 1;
-		gramado[3][2] = 1;
-		gramado[5][5] = 1;
-
-		gramado[6][6] = 3;
+		Random random = new Random();
+		for(int i = 0; i < quantidadeFormigueiros; i++) {
+			linhaRandom = random.nextInt(7);
+			colunaRandom = random.nextInt(7);
+			while(gramado[linhaRandom][colunaRandom] == 1 || gramado[linhaRandom][colunaRandom] == 3) {
+				linhaRandom = random.nextInt(7);
+				colunaRandom = random.nextInt(7);
+			}
+			gramado[linhaRandom][colunaRandom] = 1;
+		}
+		
 	}
 
 	public boolean andarGramado() {
 		int i = 0, j = 0;
 
 		while (i != 7) {
-			for (j = 0; j < 7; j++) {
-				if (gramado[i][j] == 1) {
-					if (i >= 0) {
-						i++;
-					} else if (i == 6) {
-						i--;
+			while(j != 7){
+				while(gramado[i][j] == 1) {
+					if (gramado[i][j] == 1) {
+						if (i == 6) {
+							i--;
+							if(j == 6) {
+								j--;
+							}else {
+								j++;
+							}
+						} else if (i >= 0) {
+							i++;
+							if(j == 6) {
+								j--;
+							}else {
+								j++;
+							}
+						}
 					}
 				}
-				System.out.println(gramado[i][j] + " - Posicao: " + i + ", " + j);
+				quantidadeAcoes++;
+				System.out.println("Acao - " + quantidadeAcoes + " =>  " + ((gramado[i][j] == 0)? "Grama" : "Parada") + " - Posicao: " + i + ", " + j);
 				if (gramado[i][j] == 3) {
 					return true;
 				}
+				if(contador == 7) {
+					j--;
+					if(j == 0) {
+						i++;
+						contador = 0;
+					}
+				}else {
+					j++;
+				}
 			}
-			if (i < 7) {
+			System.out.println();
+			if(i < 7) {
 				i++;
+				contador = 7;
+				j = 6;
 			}
 		}
 		return false;
