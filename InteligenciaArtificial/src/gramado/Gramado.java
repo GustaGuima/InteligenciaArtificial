@@ -27,7 +27,7 @@ public class Gramado {
 
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 7; j++) {
-				System.out.print(((gramado[i][j] == 0)? "GR" : (gramado[i][j] == 1)? "FM" : "ST") + " ");
+				System.out.print(((gramado[i][j] == 0)? "GR" : (gramado[i][j] == 1)? "FM" : (gramado[i][j] == 4)? "GA" : "ST") + " ");
 			}
 			System.out.println();
 		}
@@ -73,9 +73,10 @@ public class Gramado {
 					}
 				}
 				quantidadeAcoes++;
-				System.out.println("Acao - " + quantidadeAcoes + " =>  " + ((gramado[i][j] == 0)? "Grama" : "Parada") + " - Posicao: " + i + ", " + j);
 				if (gramado[i][j] == 3) {
 					return true;
+				}else {
+					gramado[i][j] = 4;
 				}
 				if(contador == 7) {
 					j--;
@@ -95,6 +96,13 @@ public class Gramado {
 			}
 		}
 		return false;
+	}
+	
+	public void cls() {
+		for (int i=0; i<50; i++)
+		{
+		    System.out.println();
+		}
 	}
 
 }

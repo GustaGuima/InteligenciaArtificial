@@ -8,11 +8,12 @@ public class Principal {
 		gramado.atribuirFormigueiro();
 		System.out.println();
 
-		gramado.mostrarGramado();
-
 		System.out.println();
+		gramado.mostrarGramado();
 		
 		System.out.println(gramado.andarGramado());
+		
+		gramado.mostrarGramado();
 
 	}
 
