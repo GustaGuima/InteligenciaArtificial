@@ -24,6 +24,7 @@ public class Interface extends Canvas implements Runnable{
 	private Thread thread;
 	
 	private boolean isRunning;
+	private boolean back;
 	
 	private BufferedImage image;
 	//private BufferedImage bg;
@@ -36,13 +37,13 @@ public class Interface extends Canvas implements Runnable{
 	private int posCortadorX = 0, posCortadorY = 0;
 	
 	private int frames = 0, maxFrames = 50;
+	
+	int contadorI = 0, contadorJ = 0;
 
 	public static void main(String[] args) {
 		Interface in = new Interface();
 		in.start();
 	}
-	
-	int contadorI = 0, contadorJ = 0;
 	
 	public Interface() {
 		campo = new Gramado();
@@ -96,19 +97,36 @@ public class Interface extends Canvas implements Runnable{
 			
 			if(campo.gramado[contadorI][contadorJ] == 0) {
 				campo.gramado[contadorI][contadorJ] = 2;
-			}
-			
-			posCortadorX = gramadoInterface[contadorI][contadorJ].x;
-			posCortadorY = gramadoInterface[contadorI][contadorJ].y;
-			
-			contadorJ++;
-			if(contadorJ > 6) {
-				contadorI++;
-				contadorJ = 0;
-			}
-			
-			if(contadorI > 6) {
-				contadorI = 0;
+				posCortadorX = gramadoInterface[contadorI][contadorJ].x;
+				posCortadorY = gramadoInterface[contadorI][contadorJ].y;
+			}if(campo.gramado[contadorI][contadorJ] == 1) {
+				if(contadorI >= 6) { 
+					contadorI--;
+					if(back) 
+						contadorJ++;
+					else
+						contadorJ--;
+				}else {
+					contadorI++;
+					if(back) 
+						contadorJ++;
+					else
+						contadorJ--;
+				}
+			}else if(!back) {
+				contadorJ++;
+				if(contadorJ > 6) {
+					contadorI++;
+					back = true;
+					contadorJ = 6;
+				}
+			}else {
+				contadorJ--;
+				if(contadorJ < 0) {
+					contadorI++;
+					back = false;
+					contadorJ = 0;
+				}
 			}
 		}
 	}
@@ -135,6 +153,8 @@ public class Interface extends Canvas implements Runnable{
 					g.setColor(new Color(0,150,0));
 				} if(campo.gramado[i][j] == 2) {
 					g.setColor(Color.green);
+				} if(campo.gramado[i][j] == 3) {
+					g.setColor(Color.blue);
 				}
 				g.fillRect(gramadoInterface[i][j].x, gramadoInterface[i][j].y,
 						   gramadoInterface[i][j].width, gramadoInterface[i][j].height);
